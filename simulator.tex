@@ -1,12 +1,57 @@
-\chapter{シミュレーション結果}
+\chapter{シミュレーション}
 \section{概要}
-この章ではシミュレーション結果とその詳細について述べる。まず初めに作成したシミュレーターの詳細について述べ、その後シミュレーション結果とその統計結果について言及する。
+この章ではブラックジャックの戦略の検証を行う際に設定した仮説とその検証手順、シミュレータの実装のそれぞれの詳細について順に述べていく。
 \bunseki{※尾崎拓海}
 
-\subsection{ブラックジャックシミュレーター}
-ベーシックストラテジーとその他の戦略を比較する事を目的に、ブラックジャックのシミュレーターをプログラミング言語（python3）を用いて作成した。このシミュレーターを使用して、
-ベーシックストラテジー、基準値15の戦略、基準値16の戦略、基準値17の戦略、基準値18の戦略、ベーシックストラテジー改変1、ベーシックストラテジー改変2のそれぞれについて勝利回数、
-敗北回数、引き分けた回数の3つを調べた。ここでは、シミュレーター内部の詳細を記述していく。
+\section{実験の仮説}
+今回は実験の仮説を以下のように設定した。
+\begin{itemize}
+\item 勝率に関して
+    \begin{itemize}
+        \item 仮説1.デック数が無限の時にはベーシックストラテジーの方が勝率が高い
+        \item 仮説2.デック数が1の時にはベーシックストラテジー以外の勝率が高い
+    \end{itemize}
+\item 複雑性を考慮した場合
+    \begin{itemize}
+        \item 仮説3.プレイヤーの合計値が15,16,17,18以上でスタンドする戦略の方が性能が高い
+    \end{itemize}
+\end{itemize}
+ベーシックストラテジーの表はデック数が無限であることを前提として導出されている。我々はこの点に着目し、デック数が有限になった際にはベーシックストラテジーよりも優れた戦略が存在するのではないか、あるいは、ベーシックストラテジーはデック数有限には対応しきれないのではないかと考えた。こうした考えから仮説1、仮説2のそれぞれを設定した。また、基準値を満たすまでヒットを続ける戦略の方が複雑性が低くなり、性能の評価がよくなるのではないかという考えから仮説3を設定した。
+\bunseki{※尾崎拓海}
+
+\section{検証手順}
+設定した仮説を以下の手順で検証した。
+\begin{enumerate}
+\item ブラックジャックのシミュレーターを作成
+\item デック数が1の場合と無限の場合でシミュレーションを10万回実施
+\item 勝った割合、負けた割合、引き分けた割合の3つを調べた
+\item 得られた結果から基本戦略とその他の戦略との間の勝率に有意な差があるかどうかをカイ二乗検定を用いて調べた
+\end{enumerate}
+\bunseki{※尾崎拓海}
+
+\section{シミュレーションの条件設定}
+今回はデック数1とデック数無限の2つの条件でシミュレーションを行う。2つの条件で比較する際に共通している条件は以下の通りである。
+\begin{itemize}
+\item プレイヤー人数は一人
+\item ベーシックストラテジー、合計値が15になるまでヒットする戦略、合計値が16になるまでヒットする戦略、合計値が17になるまでヒットする戦略、合計値が18になるまでヒットする戦略、ベーシックストラテジー改変1、ベーシックストラテジー改変2それぞれの戦略でシミュレーターを実行する
+\item ゲームの実行回数は10万回
+\end{itemize}
+
+\bunseki{※尾崎拓海}
+
+\section{ブラックジャックシミュレーター}
+ベーシックストラテジーとその他の戦略を比較する事を目的に、ブラックジャックのシミュレーターをプログラミング言語（python3）を用いて作成した。このシミュレーターを使用して、ベーシックストラテジー、基準値15の戦略、基準値16の戦略、基準値17の戦略、基準値18の戦略、ベーシックストラテジー改変1、ベーシックストラテジー改変2のそれぞれについて勝利回数、敗北回数、引き分けた回数の3つを調べた。ここでは、シミュレーター内部の詳細を記述していく。
+
+\lstset{ 
+   basicstyle={\ttfamily\small}, %書体の指定 
+   frame=tRBl, %フレームの指定 
+   framesep=10pt, %フレームと中身（コード）の間隔 
+   breaklines=true, %行が長くなった場合の改行 
+   linewidth=12cm, %フレームの横幅 
+   lineskip=-0.5ex, %行間の調整 
+   tabsize=2 %Tabを何文字幅にするかの指定 
+}
+
 \bunseki{※尾崎拓海}
 
 \subsubsection{基本設計}
@@ -18,7 +63,31 @@
 \subsubsection{トランプのカードを表現するクラス}
 このクラスでは実際のトランプのカードを表現するためにrankという変数にA～Kというトランプのランクを、suitという
 変数にスペード、ハート、ダイヤ、クラブのスートを定義した。また、J,Q,K,Aの絵札カードは10や11と数える必要があっ
-たので、ランクを数字に変換する処理もこちらに書き、valueという変数に入力した。
+たので、ランクを数字に変換する処理もこちらに書き、valueという変数に入力した。ソースコードは以下である。
+\begin{itemize}
+\item カードを表現するクラス
+\begin{lstlisting}
+class Card:
+    RANKS = ('A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K')
+    SUITS = ('Spade', 'Heart', 'Diamond', 'Club')
+
+    # 初期化
+    def __init__(self, rank, suit):
+        self.rank = rank
+        self.suit = suit
+        self.value = int(self.getvalue())
+
+    # ランクを数字に変換する
+    def getvalue(self):
+        if self.rank == 'A':
+            return 11
+        elif self.rank == 'J' or self.rank == 'Q' or self.rank == 'K':
+            return 10
+        else:
+            return self.rank
+\end{lstlisting}
+\end{itemize}
+
 \bunseki{※尾崎拓海}
 
 \subsubsection{デックを表現するクラス}
@@ -27,34 +96,232 @@
 定する。また、デックのシャッフルには独自に作成した関数を使用した。このシャッフル関数はpythonのrandom機能を
 用いて独自に設計したものであり、引数にシャッフルを行う回数を指定する。カードの配列の長さが仮に52だった場合に
 は、1～26番目のカードからランダムに取り出したカードと、27～52番目のからランダムに取り出したカードを交換する
-という処理を（デック数×指定されたシャッフル回数）繰り返すという処理でシャッフル関数を作成した。
+という処理を（デック数×指定されたシャッフル回数）繰り返すという処理でシャッフル関数を作成した。ソースコードは以下である。
+\begin{itemize}
+\item デックを表現するクラス
+\begin{lstlisting}
+class Deck:
+    CARDS = [Card(rank, suit) for suit in Card.SUITS for rank in Card.RANKS]
+    Cards = []
+    BaseDeck = []
+    for rank in Card.RANKS:
+        for suit in Card.SUITS:
+            BaseDeck.append(Card(rank, suit))  # オブジェクト共有を回避するための基本となる一デッキ
+
+    # 初期化
+    # decNumの数だけデッキを使用する
+    def __init__(self, decNum):
+        basedec = []
+        while (decNum > 0):
+            basedec += self.BaseDeck
+            decNum -= 1
+        self.Cards = basedec
+        self.current = 0
+
+    # シャッフルをする関数
+    # 引数に入れる数字によりシャッフルの回数を制御
+    def shuffle(self, shuffleNum):
+        self.current = 0
+        while shuffleNum > 0:
+            cut1 = random.randrange(0, len(self.Cards) / 2)
+            cut2 = random.randrange(len(self.Cards) / 2, len(self.Cards))
+            temp = self.Cards[cut1]
+            self.Cards[cut1] = self.Cards[cut2]
+            self.Cards[cut2] = temp
+            shuffleNum -= 1
+\end{lstlisting}
+\end{itemize}
 \bunseki{※尾崎拓海}
 
 \subsubsection{ゲーム参加者を表すスーパークラス}
 このクラスでは自身の手札とその手札の合計値、手札に含まれるAの枚数、バーストしているかどうかのフラグ、手札
 がブラックジャックとなっているかどうかのフラグのそれぞれを定義している。手札に含まれるAの枚数は自身の手札
 の合計値を計算する時と、ブラックジャックの条件を満たしているかどうかを判別する際に使用した。また手札の合計
-値を返す関数を定義し、その内側で自身がバーストしているかどうかの判定も行っている。
+値を返す関数を定義し、その内側で自身がバーストしているかどうかの判定も行っている。ソースコードは以下である。
+\begin{itemize}
+\item ゲーム参加者を表すスーパークラス
+\begin{lstlisting}
+class GamePlayer:
+
+    # 初期化関数
+    def __init__(self):
+        self.cards = []  # 参加者の手札
+        self.total = 0  # 参加者の手札の合計値
+        self.acetotal = 0  # 参加者の手札に含まれるAの枚数
+        self.usedace = 0  # 1として数えたAの枚数
+        self.burst = False  # バーストしているかどうか
+        self.naturalbj = False  # ナチュラルブラックジャックを満たしているかどうか
+        self.normalbj = False  # 手札の合計値が21になっているかどうか
+
+    # 　子オブジェクトから呼び出せる初期化関数
+    def initialize(self):
+        self.cards = []
+        self.total = 0
+        self.acetotal = 0
+        self.usedace = 0
+        self.burst = False
+        self.naturalbj = False
+        self.normalbj = False
+
+    # ゲームプレイヤーの手札の合計値を返す関数
+    def totalvalue(self):
+        i = 0
+        self.total = 0
+        self.acetotal = 0
+        cardnum = len(self.cards)
+
+        while i < cardnum:
+            if (self.cards[i].rank == 'A'):
+                self.acetotal += 1
+            self.total += self.cards[i].value
+            i += 1
+        self.total -= 10 * self.usedace
+
+        # プレイヤーのバースト判定の処理
+        if (self.total > 21):
+            if (self.acetotal - self.usedace > 0):
+                self.total -= 10
+                self.usedace += 1
+                if (self.total > 21):
+                    self.burst = True
+            else:
+                self.burst = True
+
+\end{lstlisting}
+\end{itemize}
 \bunseki{※尾崎拓海}
 
 \subsubsection{プレイヤークラス}
 このクラスは先のゲーム参加者を表すスーパークラスを継承しており、ゲームに参加しているプレイヤーを表現して
 いる。プレイヤークラスでは新たに自身の名前を表す変数と自身の勝利回数、敗北回数を記録する変数を定義した。
 またこのクラスでは新しく、カードを受け取る関数とヒットを行う関数、スタンドを行う関数、勝利回数と敗北回数
-を増加させる関数を作成した。
+を増加させる関数を作成した。ソースコードは以下である。
+\begin{itemize}
+\item プレイヤークラス
+\begin{lstlisting}
+class Player(GamePlayer):
+    # プレイヤーの初期化
+    def __init__(self, name):
+        self.name = name  # プレイヤーの名前
+        self.totalwin = 0  # プレイヤーの勝利回数
+        self.totallose = 0  # プレイヤーの敗北回数
+        super().__init__()
+
+    # プレイヤーがカードを受け取る時に使用する関数
+    def dealedcard(self, card):
+        self.cards.append(card)
+
+    # プレイヤー側のヒットの処理
+    def hit(self, dealer):
+        self.dealedcard(dealer.dealcard())
+        self.showhands()
+
+    # プレイヤー側のスタンドの処理
+    def stand(self):
+        pass
+
+    # プレイヤーの勝利回数を増やす
+    def addtotalwin(self):
+        self.totalwin += 1
+
+    # プレイヤーの敗北回数を増やす
+    def addtotallose(self):
+        self.totallose += 1
+
+\end{lstlisting}
+\end{itemize}
 \bunseki{※尾崎拓海}
 
 \subsubsection{ディーラークラス}
 このクラスは先のゲーム参加者を表すスーパークラスを継承しており、ゲームのディーラーを表現しているクラス
 となっている。ディーラークラスの中でデックをインスタンス化してディーラー側がデックを所持している事を表
 現している。このクラスでは新しく、デックのシャッフル回数という変数を定義した。また、このクラスではカード
-を配る関数、ディーラーの手札合計が17を超えるまでカードを引き続ける関数を作成した。
+を配る関数、ディーラーの手札合計が17を超えるまでカードを引き続ける関数を作成した。カードを配る関数についてはデック数有限の時とデック数無限の時とで処理を変更している。ソースコードは以下である。
+\begin{itemize}
+\item ディーラークラス（デック数有限）
+\begin{lstlisting}
+class Dealer(GamePlayer):
+    # ディーラーの初期化
+    def __init__(self, deckNum):
+        self.deck = Deck(deckNum)
+        # ディーラーがシャッフルする回数。今回は一万回シャッフルする。
+        self.shufflenum = 10000
+        self.deck.shuffle(deckNum * self.shufflenum)
+        super().__init__()
+
+    # カードを配る関数
+    def dealcard(self):
+        '''デック数有限の際はこちらのコメントアウトを解除する'''
+        card = self.deck.Cards[self.deck.current]
+        self.deck.current += 1
+        
+        '''デック数無限の際にはこちらのコメントアウトを解除する'''
+        # randomcard = random.randrange(13);
+        # card = Card(Card.RANKS[randomcard], Card.SUITS[0])
+        # return card
+
+    # 一番最初にカードを配る際の関数
+    def firstdeal(self, player):
+        super().__init__()
+        for x in player:
+            x.initialize()
+        firstdeal = 2
+        while firstdeal > 0:
+            self.cards.append(self.dealcard())
+            for x in player:
+                x.cards.append(self.dealcard())
+            firstdeal -= 1
+
+    # 合計が17を超えるまで続ける処理
+    def continuehit(self):
+        self.totalvalue()
+        while (self.total < 17):
+            self.cards.append(self.dealcard())
+            self.totalvalue()
+
+\end{lstlisting}
+\end{itemize}
 \bunseki{※尾崎拓海}
 
 \subsubsection{ゲームマネージャークラス}
 このクラスは主にゲームの勝敗判定に使用している。プレイヤーとディーラーの手札の合計値を比較し勝敗を判定
 する関数と、手札がブラックジャックになっているかどうかを判定する関数を作成した。勝敗判定のタイミングで
-プレイヤーの勝利回数、敗北回数のそれぞれを記録している。
+プレイヤーの勝利回数、敗北回数のそれぞれを記録している。ソースコードは以下である。
+\begin{itemize}
+\item ゲームマネージャークラス
+\begin{lstlisting}
+class GameManager:
+    def __init__(self, players, dealer):
+        self.players = players
+        self.dealer = dealer
+        self.checkdeal = True
+
+    # 各プレイヤーとディーラーとの間で勝敗を決める
+    def judge(self):
+        for x in self.players:
+            self.checkblackjack(x)
+        self.checkblackjack(self.dealer)
+        for player in self.players:
+            if player.burst == True:
+                player.addtotallose()
+            elif player.burst == False and self.dealer.burst == True:
+                player.addtotalwin()
+            elif player.total > self.dealer.total:
+                player.addtotalwin()
+            elif player.total < self.dealer.total:
+                player.addtotallose()
+            elif player.total == self.dealer.total:
+                if player.naturalbj and self.dealer.naturalbj:
+                elif player.naturalbj and self.dealer.normalbj:
+                    player.addtotalwin()
+                elif player.normalbj and self.dealer.naturalbj:
+                    player.addtotallose()
+                elif player.normalbj and self.dealer.normalbj:
+                    pass
+                else:
+                    pass
+\end{lstlisting}
+\end{itemize}
 \bunseki{※尾崎拓海}
 
 \subsubsection{メイン関数}
@@ -80,19 +347,4 @@
 今回のシミュレーションでは条件を簡単にするためにヒットとスタンドの処理のみを使用しており、その他の複雑な
 ルールについては実装していない。ブラックジャックのすべてのルールをプログラム上に再現できているわけではな
 いので、後期の活動で完全版のシミュレーターを作成する。
-\bunseki{※尾崎拓海}
-
-\subsection{シミュレーションの条件設定}
-今回はデック数1とデック数無限の2つの条件でシミュレーションを行った。共通している条件は以下の通りである。
-\begin{itemize}
-\item プレイヤー人数は一人
-
-\item ベーシックストラテジー、基準値15戦略、基準値16戦略、基準値17戦略、基準値18戦略、ベーシックストラテジー改変1、ベーシックストラテジー改変2それぞれの戦略でシミュレーターを実行する
-\item ゲームの実行回数は10万回
-\end{itemize}
-
-デック数1という条件は元々定義していたデック数の変数を用いて作成した。デック数無限についてはどのカードも引
-く確率が1/13という事実を利用して、pythonのrandom関数を使用し作成した。具体的にはディーラーがカードを配る
-関数の部分をデックからカードを引いてくるのではなく、1/13の確率でA～Kいずれかのカードを配る様に設計した。
-シミュレーション終了後は勝利回数、敗北回数、引き分け回数の3つをtxt形式で出力した。
 \bunseki{※尾崎拓海}

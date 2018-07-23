@@ -100,7 +100,7 @@
         ベーシックストラテジーの導出を行う上で、xについて以下の3つの場合分けを行う。
         \begin{eqnarray}
             x<12\\
-            12\leq x\leq 16\\
+            12 \leq x\leq 16\\
             x>16
         \end{eqnarray}
         \subsubsection{}
@@ -146,17 +146,21 @@
             となる。この時$E_{d,x}-E_{s,x}$は、全ての$D$に対して常に0未満となる。つまり、$E_{d,x}-E_{s,x}<0$であるから、$M(D)\leq 16$となる。
         
         以上のことから、ベーシックストラテジーは以下のような戦略表となる。
-        \begin{table}[h]
-        \caption{ベーシックストラテジーの戦略表}
-        \centering
-        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
-        \hline
-      & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & A \\ \hline
-17以上  & S & S & S & S & S & S & S & S & S  & S \\ \hline
-13〜16 & S & S & S & S & S & H & H & H & H  & H \\ \hline
-12    & H & H & S & S & S & H & H & H & H  & H \\ \hline
-11以下  & H & H & H & H & H & H & H & H & H  & H \\ \hline
-        \end{tabular}
-        \end{table}
+        \begin{table}[H]
+            \begin{center}
+            \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+            \hline
+                        & \multicolumn{10}{c|}{ディーラーのアップカード}     \\ \hline
+            プレイヤーの手札の合計 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & A \\ \hline
+            19以上        & S & S & S & S & S & S & S & S & S  & S \\ \hline
+            18          & S & S & S & S & S & S & S & S & S  & S \\ \hline
+            17          & S & S & S & S & S & S & S & S & S  & S \\ \hline
+            16          & S & S & S & S & S & H & H & H & H  & H \\ \hline
+            15          & S & S & S & S & S & H & H & H & H  & H \\ \hline
+            13,14       & S & S & S & S & S & H & H & H & H  & H \\ \hline
+            12          & H & H & S & S & S & H & H & H & H  & H \\ \hline
+            11以下        & H & H & H & H & H & H & H & H & H  & H \\ \hline
+            \end{tabular}
+            \end{center}
+            \end{table}
         \bunseki{※鳥谷航大}
-    

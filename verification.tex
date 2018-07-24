@@ -160,35 +160,40 @@ Sに変更したが,改変2ではHに変更した.この変更によってプレ
 
 \subsection{複雑性の定義について}
 
-より人に扱いやすい戦略を定義する為に、戦略の複雑性を次のように設定した。
-まず、戦略の文字列を圧縮する。圧縮の方法は、「連続する文字+連続して文字が出た回数」を合わせたものとした。例として、「HHSSSHHHHH」という10字からなる文字列を圧縮すると、「H2S3H5」となり、圧縮した後の文字列は6字となる。この時、連続して文字が出た回数が2桁になったとしても、ここでは1字として数える。
-\bunseki{※渡邊凛}
+プレイヤーに扱いやすい戦略とは何かを定義する為に、戦略の複雑性を次のように定義した。
+まず、戦略の文字列を圧縮する。元の表を「連続する文字+連続して文字が出た回数」と変換することで文字列を圧縮した。
+例として、「HHSSSHHHHH」という10文字からなる文字列を圧縮すると、「H2S3H5」となり、圧縮した後の文字列は6文字
+となる。また「HHHHHHHHHH」という文字列を「H10」と圧縮したときのように、連続して同じ文字が出た回数が2桁の場合には
+数字部分を1文字として数える。つまり「H10」の文字列長は2文字である。
+
+圧縮した後の文字列長を元の表の大きさ(80)で割った数値を複雑性の定義とした。
+\bunseki{※米村祥裕}
 
 \subsection{各戦略の複雑性}
 
-この圧縮の方式を各戦略に行い、それぞれの圧縮された後の文字列の長さを元の長さで割ったものを複雑性とした。用意した戦略は次のような8行の配列とし、それぞれの行に圧縮を行った。\\
+%用意した戦略は次のような8行の配列とし、それぞれの行に圧縮を行った。\\
 
-\begin{table}[H]
-\caption{ベーシックストラテジーの戦略表}
-\label{table:data_type}
-\begin{center}
-\begin{tabular}{|cc|c|c|c|c|c|c|c|c|c|c|}
-\hline
-                            &            & \multicolumn{10}{c|}{ディーラーのアップカード}     \\ \cline{3-12} 
-                            &            & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & A \\ \hline
-\multicolumn{1}{|l|}{手札の合計} & 19以上       & S & S & S & S & S & S & S & S & S  & S \\ \cline{2-12} 
-\multicolumn{1}{|l|}{}      & 18         & S & S & S & S & S & S & S & S & S  & S \\ \cline{2-12} 
-\multicolumn{1}{|l|}{}      & 17         & S & S & S & S & S & S & S & S & S  & S \\ \cline{2-12} 
-\multicolumn{1}{|l|}{}      & 16         & S & S & S & S & S & H & H & H & H  & H \\ \cline{2-12} 
-\multicolumn{1}{|l|}{}      & 15         & S & S & S & S & S & H & H & H & H  & H \\ \cline{2-12} 
-\multicolumn{1}{|l|}{}      & 13$\sim$14 & S & S & S & S & S & H & H & H & H  & H \\ \cline{2-12} 
-\multicolumn{1}{|l|}{}      & 12         & H & H & S & S & S & H & H & H & H  & H \\ \cline{2-12} 
-\multicolumn{1}{|l|}{}      & 11以下       & H & H & H & H & H & H & H & H & H  & H \\ \hline
-\end{tabular}
-\end{center}
-\end{table}
+%\begin{table}[H]
+%\caption{ベーシックストラテジーの戦略表}
+%\label{table:data_type}
+%\begin{center}
+%\begin{tabular}{|cc|c|c|c|c|c|c|c|c|c|c|}
+%\hline
+%                            &            & \multicolumn{10}{c|}{ディーラーのアップカード}     \\ \cline{3-12} 
+%                            &            & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & A \\ \hline
+%\multicolumn{1}{|l|}{手札の合計} & 19以上       & S & S & S & S & S & S & S & S & S  & S \\ \cline{2-12} 
+%\multicolumn{1}{|l|}{}      & 18         & S & S & S & S & S & S & S & S & S  & S \\ \cline{2-12} 
+%\multicolumn{1}{|l|}{}      & 17         & S & S & S & S & S & S & S & S & S  & S \\ \cline{2-12} 
+%\multicolumn{1}{|l|}{}      & 16         & S & S & S & S & S & H & H & H & H  & H \\ \cline{2-12} 
+%\multicolumn{1}{|l|}{}      & 15         & S & S & S & S & S & H & H & H & H  & H \\ \cline{2-12} 
+%\multicolumn{1}{|l|}{}      & 13$\sim$14 & S & S & S & S & S & H & H & H & H  & H \\ \cline{2-12} 
+%\multicolumn{1}{|l|}{}      & 12         & H & H & S & S & S & H & H & H & H  & H \\ \cline{2-12} 
+%\multicolumn{1}{|l|}{}      & 11以下       & H & H & H & H & H & H & H & H & H  & H \\ \hline
+%\end{tabular}
+%\end{center}
+%\end{table}
 
-今回用意した戦略を、全て圧縮したのが以下の表である。
+今回用意した戦略を、全て圧縮したのが表\ref{table:data_type}である。
 
 
 %\begin{figure}[htbp]
@@ -217,5 +222,7 @@ Sに変更したが,改変2ではHに変更した.この変更によってプレ
 \end{center}
 \end{table}
 
-この表を見ると、ベーシックストラテジーを改変した戦略の方が、複雑性が低く、人にとって扱いやすいといえる。また、一定の数字以上になるまでヒットを続ける戦略は、複雑性がベーシックストラテジーの半分程度であり、とても人にとって扱いやすい戦略だといえる。
+表\ref{table:data_type}を見ると、ベーシックストラテジーを改変した戦略の方が、複雑性が低く、プレイヤーにとって扱いやすいといえる。
+また、手札の合計値が一定以上になるまでヒットする戦略は、複雑性がベーシックストラテジーの半分程度であり、プレイヤーに
+とって扱いやすい戦略だといえる。
 \bunseki{※渡邊凛}

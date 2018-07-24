@@ -1,6 +1,6 @@
-\chapter{シミュレーション}
 \section{概要}
-この章ではブラックジャックの戦略の検証を行う際に設定した仮説とその検証手順、シミュレータの実装のそれぞれの詳細について順に述べていく。
+今回ブラックジャックの戦略を検証するためにいくつかの仮説を立ててシミュレーションを行った。その際に立ててた仮説と検証の手順について以下の章で詳しく述べていく。また、検証のためにpython3を用いてブラックジャックのシミュレータを作成したのでその詳細についても述べていく。
+
 \bunseki{※尾崎拓海}
 
 \section{実験の仮説}
@@ -106,10 +106,11 @@ class Deck:
     BaseDeck = []
     for rank in Card.RANKS:
         for suit in Card.SUITS:
-            BaseDeck.append(Card(rank, suit))  # オブジェクト共有を回避するための基本となる一デッキ
+            # オブジェクト共有を回避するための基本となる一デッキ
+            BaseDeck.append(Card(rank, suit))  
 
     # 初期化
-    # decNumの数だけデッキを使用する
+    # decNum の数だけデッキを使用する
     def __init__(self, decNum):
         basedec = []
         while (decNum > 0):
@@ -145,15 +146,22 @@ class GamePlayer:
 
     # 初期化関数
     def __init__(self):
-        self.cards = []  # 参加者の手札
-        self.total = 0  # 参加者の手札の合計値
-        self.acetotal = 0  # 参加者の手札に含まれるAの枚数
-        self.usedace = 0  # 1として数えたAの枚数
-        self.burst = False  # バーストしているかどうか
-        self.naturalbj = False  # ナチュラルブラックジャックを満たしているかどうか
-        self.normalbj = False  # 手札の合計値が21になっているかどうか
+        # 参加者の手札
+        self.cards = []  
+        # 参加者の手札の合計値
+        self.total = 0  
+        # 参加者の手札に含まれるAの枚数
+        self.acetotal = 0  
+        # 1として数えたAの枚数
+        self.usedace = 0  
+        # バーストしているかどうか
+        self.burst = False  
+        # ナチュラルブラックジャックを満たしているかどうか
+        self.naturalbj = False 
+        # 手札の合計値が21 になっているかどうか
+        self.normalbj = False  
 
-    # 　子オブジェクトから呼び出せる初期化関数
+    # 子オブジェクトから呼び出せる初期化関数
     def initialize(self):
         self.cards = []
         self.total = 0
@@ -251,11 +259,11 @@ class Dealer(GamePlayer):
 
     # カードを配る関数
     def dealcard(self):
-        '''デック数有限の際はこちらのコメントアウトを解除する'''
+        ''' デック数有限の際はこちらのコメントアウトを解除する '''
         card = self.deck.Cards[self.deck.current]
         self.deck.current += 1
         
-        '''デック数無限の際にはこちらのコメントアウトを解除する'''
+        ''' デック数無限の際にはこちらのコメントアウトを解除する '''
         # randomcard = random.randrange(13);
         # card = Card(Card.RANKS[randomcard], Card.SUITS[0])
         # return card
@@ -272,7 +280,7 @@ class Dealer(GamePlayer):
                 x.cards.append(self.dealcard())
             firstdeal -= 1
 
-    # 合計が17を超えるまで続ける処理
+    # 合計が17 を超えるまで引き続ける処理
     def continuehit(self):
         self.totalvalue()
         while (self.total < 17):
@@ -341,6 +349,7 @@ class GameManager:
 	  \item ディーラーの行動終了後に、勝敗判定を行う。
     \end{enumerate}
 \end{enumerate}
+
 \bunseki{※尾崎拓海}
 
 \subsubsection{未実装の機能について}

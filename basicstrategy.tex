@@ -131,7 +131,7 @@
             \begin{displaymath}
                 E_{d,x} - E_{s,x} = -\frac{2}{13}(x-8)P(T>21)+\frac{1}{13}\sum_{t-17}^{21}P(T=t)(43-2t)
             \end{displaymath}
-            ここで$x=x_0$として、$E_{d,x_0} - E_{s,x_0}=0$の時を考える。この時、$x_0$は、
+            ここで$x=x_0$として、$E_{d,x_0} - E_{s,x_0}=0$の時を考える。この時$x_0$は、
             \begin{displaymath}
                 \begin{split}
                     x_0&=8+\frac{1}{2}\frac{\sum_{t=17}^{21}(43-2t)P(T=t)}{P(T>21)}\\
@@ -142,16 +142,16 @@
             $x>16$のとき、まず、$x=17$を考える。この時$E_{d,x}-E_{s,x}$は、
             \begin{displaymath}
                 \begin{split}
-                    E_{d,x}-E_{s,x}=-\frac{18}{13}P(T>21)-\frac{5}{13}P(T=17)+\frac{1}{13}\sum_{t=18}^21(43-2t)P(T=t)
+                    E_{d,x}-E_{s,x}=-\frac{18}{13}P(T>21)-\frac{5}{13}P(T=17)+\frac{1}{13}\sum_{t=18}^{21}(43-2t)P(T=t)
                 \end{split}
             \end{displaymath}
             となる。この時$E_{d,x}-E_{s,x}$は、全ての$D$に対して常に0未満となる。つまり、$E_{d,x}-E_{s,x}<0$であるから、$M(D)\leq 16$となる。
         
-        以上のことから、ベーシックストラテジーは表\ref{basicstrategytable}となる。この戦略表は、縦軸がプレイヤーの手札の合計値を表し、横軸がディーラーのアップカードを表す。それぞれの交わる場所がプレイヤーの取る最適な行動となっていて、Sがスタンド、Hがヒットを表す。例えば、プレイヤーの手札の合計値が12、ディーラーのアップカードが2であった場合、プレイヤーの取るべき行動はH、つまりヒットとなる。
+        以上のことから、ベーシックストラテジーは表\ref{kihonsenryaku}となる。この戦略表は、縦軸がプレイヤーの手札の合計値を表し、横軸がディーラーのアップカードを表す。それぞれの交わる場所がプレイヤーの取る最適な行動となっていて、Sがスタンド、Hがヒットを表す。例えば、プレイヤーの手札の合計値が12、ディーラーのアップカードが2であった場合、プレイヤーの取るべき行動はH、つまりヒットとなる。
         \begin{table}[H]
             \begin{center}
-            \label{basicstrategytable}
             \caption{ベーシックストラテジーの戦略表}
+            \label{kihonsenryaku}
             \begin{tabular}{|lc|c|c|c|c|c|c|c|c|c|c|}
                 \hline
                                             &       & \multicolumn{10}{c|}{ディーラーのアップカード}     \\ \cline{3-12} 

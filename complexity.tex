@@ -6,21 +6,11 @@
 性能の基準は以下の二通りを用意した。\\
 ~~ 性能1. (勝率) ÷ (複雑性)\\
 ~~ 性能2. (勝率) － (複雑性)\\
-この評価基準に従って、デック数1の時とデック数無限の時の性能を表にした。
-
-
-
-%\begin{figure}[htbp]
-%\begin{center}
-%\includegraphics[width=15cm,bb=0 0 602 279]{3.png}
-%\end{center}
-%\caption{1デックの時の各戦略の性能}
-%\label{picture}
-%\end{figure}
+この評価基準に従って、デック数1の時の性能を表\ref{table:data_type4}、デック数無限の時の性能を表\ref{table:data_type5}にまとめた。
 
 \begin{table}[H]
 \caption{デック数1の時の各戦略の性能}
-\label{table:data_type}
+\label{table:data_type4}
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
@@ -36,18 +26,9 @@
 \end{center}
 \end{table}
 
-
-%\begin{figure}[htbp]
-%\begin{center}
-%\includegraphics[width=15cm,bb=0 0 541 255]{4_.png}
-%\end{center}
-%\caption{無限デックの時の各戦略の性能}
-%\label{picture}
-%\end{figure}
-
 \begin{table}[H]
 \caption{デック数無限の時の各戦略の性能}
-\label{table:data_type}
+\label{table:data_type5}
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
@@ -72,15 +53,21 @@
 \bunseki{※渡邊凛}
 
 \section{検証結果のまとめ}
-これまで行った検証や性能評価による結果をまとめる。\\
+これまで行った検証や性能評価による結果をまとめる。
+
 勝率のみを考慮した場合
 \begin{itemize}
-\item 結果1:一定の数字以上でヒットする戦略よりも、ベーシックストラテジーとベーシックストラテジー改変のほうが有意に高い勝率だった
-\item 結果2:ベーシックストラテジーベーシックストラテジー改変１、ベーシックストラテジー改変2のそれぞれの戦略間に有意な差はみられなかった
+\item 結果1:一定の数字以上になるあでヒットする戦略よりも、ベーシックストラテジーとベーシックストラテジー改変1、ベーシックストラテジー改変2のほうが有意に高い勝率だった
+\item 結果2:ベーシックストラテジーとベーシックストラテジー改変１、ベーシックストラテジー改変2のそれぞれの戦略間に有意な差はみられなかった
 \item 結果3:ベーシックストラテジー改変1と18以上までヒットする戦略にはデック数無限とデック数1で勝率に有意な差があった
 \end{itemize}
+
+勝率を考慮すると、ベーシックストラテジーとベーシックストラテジー改変1、ベーシックストラテジー改変2の3つが勝率が高く、優秀な戦略であることが分かった。ただ、ベーシックストラテジー改変1はデック数の違いによって勝率に差がある。
+
 複雑性を考慮して性能を評価した場合
 \begin{itemize}
 \item 結果4：15以上になるまでヒットする戦略が1番優秀であることが判明した
 \end{itemize}
+
 複雑性を考慮すると、ベーシックストラテジーには改善の余地があることが判明した。
+\bunseki{※柿崎大輝}
